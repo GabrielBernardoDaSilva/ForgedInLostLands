@@ -26,13 +26,14 @@ impl DestinyRiftManager {
 
     pub fn remove_event(&mut self) {
         let keys_to_remove = self
-            .events
-            .iter()
-            .filter(|(_, ev)| ev.is_empty())
-            .map(|(key, _)| *key)
-            .collect::<Vec<_>>();
-
-        for key in keys_to_remove {
+        .events
+        .iter()
+        .filter(|(_, ev)| ev.is_empty())
+        .map(|(key, _)| *key)
+        .collect::<Vec<_>>();
+    
+    for key in keys_to_remove {
+            println!("Removing event: {:?}", key);
             self.events.remove(&key);
         }
     }

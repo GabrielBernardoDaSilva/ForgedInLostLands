@@ -5,7 +5,6 @@ use prime_forge::{
     lost_realm::LostRealm, EtherealFlow,
 };
 
-use crate::prime_forge::destiny_rift::DestinyRiftManager;
 
 pub mod prime_forge;
 
@@ -55,13 +54,17 @@ fn main() {
     h.0 = 200;
     lost_realm.add_object(f_object);
 
+    lost_realm.destiny_rift_manager.add_event(Box::new(Collision(true)));
+    let rs = lost_realm.destiny_rift_manager.consume_event::<Collision>();
+    if let Some(rs) = rs {
+        println!("Collision: {:?}", rs.0);
+    }
+
     lost_realm.start();
     lost_realm.update();
 
-    let mut destiny_rift_manager = DestinyRiftManager::new();
-    destiny_rift_manager.add_event(Box::new(Collision(true)));
 
-    let collision = destiny_rift_manager.consume_event::<Collision>().unwrap();
-    println!("Collision: {:?}", collision.0);
+
+    
 
 }
