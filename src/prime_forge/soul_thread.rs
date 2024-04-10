@@ -1,0 +1,88 @@
+#[derive(Clone, Copy)]
+pub struct TemporalPause {
+    amount_in_seconds: f32,
+}
+
+#[derive(Clone, Copy)]
+pub enum EssenceAspect {
+    Running,
+    Yielded(TemporalPause),
+    Finished,
+}
+
+pub struct SoulThread {
+    state: EssenceAspect,
+    generator: Box<dyn FnMut() -> EssenceAspect + 'static>,
+    is_waiting: bool,
+    amount_to_wait: f32,
+}
+
+impl SoulThread {
+    // Constructor to create a new coroutine
+    pub fn new(generator: impl FnMut() -> EssenceAspect + 'static) -> Self {
+        Self {
+            state: EssenceAspect::Running,
+            generator: Box::new(generator),
+            is_waiting: false,
+            amount_to_wait: 0.0,
+        }
+    }
+
+    // Function to resume execution of the coroutine
+    fn resume(&mut self) -> Option<TemporalPause> {
+        match self.state {
+            EssenceAspect::Running => {
+                let next_state = (self.generator)();
+                self.state = next_state;
+                self.resume()
+            }
+            EssenceAspect::Yielded(value) => {
+                self.state = EssenceAspect::Running;
+                Some(value)
+            }
+            EssenceAspect::Finished => {
+                self.state = EssenceAspect::Finished;
+                None
+            }
+        }
+    }
+
+    pub fn update(&mut self, delta_time: f32) {
+        if self.is_waiting {
+            self.amount_to_wait -= delta_time;
+            println!("Coroutine: {:?}", self.amount_to_wait);
+            if self.amount_to_wait > 0.0 {
+                return;
+            }
+            self.is_waiting = false;
+        }
+
+        if let Some(res) = self.resume() {
+            self.is_waiting = true;
+            self.amount_to_wait = res.amount_in_seconds;
+            println!("Coroutine: {:?}", res.amount_in_seconds);
+        }
+    }
+}
+
+pub struct SoulThreadManager {
+    soul_threads: Vec<SoulThread>,
+}
+
+impl SoulThreadManager {
+    pub fn new() -> Self {
+        Self {
+            soul_threads: Vec::new(),
+        }
+    }
+
+    pub fn add_thread(&mut self, thread: SoulThread) {
+        self.soul_threads.push(thread);
+    }
+
+    pub fn update(&mut self, delta_time: f32) {
+        for thread in self.soul_threads.iter_mut() {
+            thread.update(delta_time);
+        }
+    }
+}
