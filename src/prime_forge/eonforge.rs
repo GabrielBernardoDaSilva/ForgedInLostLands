@@ -15,12 +15,11 @@ impl EonForge {
 
     pub fn start(&mut self) {
         self.time_elapsed_since_start = self.time_elapsed_since_start + Duration::new(1, 0);
-        self.delta_time = 1.0;
     }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self, dt: f32) {
         self.time_elapsed_since_start = self.time_elapsed_since_start + Duration::new(1, 0);
-        self.delta_time = 1.0;
+        self.delta_time = dt;
     }
 
     pub fn get_delta_time(&self) -> f32 {

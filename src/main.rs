@@ -5,6 +5,8 @@ use prime_forge::{
     lost_realm::LostRealm, EtherealFlow,
 };
 
+use crate::prime_forge::soul_thread::{EssenceAspect, SoulThread, TemporalPause};
+
 pub mod prime_forge;
 
 pub struct Health(i32);
@@ -14,9 +16,7 @@ impl ForgedTrait for Health {
         println!("Health started");
     }
 
-    fn update(&self) {
-        println!("Health updated");
-    }
+    fn update(&self) {}
 }
 
 impl EtherealFlow for Health {
@@ -42,8 +42,6 @@ impl EtherealFlow for Collision {
     }
 }
 
-
-
 fn main() {
     let mut lost_realm = LostRealm::new();
     let mut f_object = ForgedObject::new("Player".to_string(), 0);
@@ -55,15 +53,24 @@ fn main() {
     h.0 = 200;
     lost_realm.add_object(f_object);
 
-    lost_realm
-        .destiny_rift_manager
-        .add_event(Box::new(Collision(true)));
-    let rs = lost_realm.destiny_rift_manager.consume_event::<Collision>();
+    lost_realm.add_destiny_rift_event(Collision(true));
+    let rs = lost_realm.consume_destiny_rift_event::<Collision>();
     if let Some(rs) = rs {
         println!("Collision: {:?}", rs.0);
     }
+    let mut counter = 10;
+    lost_realm.add_soul_thread(SoulThread::new("Soul", move || {
+        println!("Soul thread");
+        counter -= 1;
+        if counter == 0 {
+            println!("Soul thread finished");
+            return EssenceAspect::Finished;
+        }
+        return EssenceAspect::Yielded(TemporalPause {
+            amount_in_seconds: 1.0,
+        });
+    }));
 
     lost_realm.start();
-    lost_realm.update();
-
+    lost_realm.debug_update();
 }

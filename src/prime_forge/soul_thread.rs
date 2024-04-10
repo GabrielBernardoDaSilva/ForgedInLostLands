@@ -1,9 +1,9 @@
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, PartialOrd)]
 pub struct TemporalPause {
-    amount_in_seconds: f32,
+    pub amount_in_seconds: f32,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, PartialOrd)]
 pub enum EssenceAspect {
     Running,
     Yielded(TemporalPause),
@@ -11,6 +11,7 @@ pub enum EssenceAspect {
 }
 
 pub struct SoulThread {
+    name: String,
     state: EssenceAspect,
     generator: Box<dyn FnMut() -> EssenceAspect + 'static>,
     is_waiting: bool,
@@ -19,8 +20,9 @@ pub struct SoulThread {
 
 impl SoulThread {
     // Constructor to create a new coroutine
-    pub fn new(generator: impl FnMut() -> EssenceAspect + 'static) -> Self {
+    pub fn new(name: &str, generator: impl FnMut() -> EssenceAspect + 'static) -> Self {
         Self {
+            name: name.to_owned(),
             state: EssenceAspect::Running,
             generator: Box::new(generator),
             is_waiting: false,
@@ -50,7 +52,7 @@ impl SoulThread {
     pub fn update(&mut self, delta_time: f32) {
         if self.is_waiting {
             self.amount_to_wait -= delta_time;
-            println!("Coroutine: {:?}", self.amount_to_wait);
+
             if self.amount_to_wait > 0.0 {
                 return;
             }
@@ -60,8 +62,11 @@ impl SoulThread {
         if let Some(res) = self.resume() {
             self.is_waiting = true;
             self.amount_to_wait = res.amount_in_seconds;
-            println!("Coroutine: {:?}", res.amount_in_seconds);
         }
+    }
+
+    pub fn stop(&mut self) {
+        self.state = EssenceAspect::Finished;
     }
 }
 
@@ -82,7 +87,29 @@ impl SoulThreadManager {
 
     pub fn update(&mut self, delta_time: f32) {
         for thread in self.soul_threads.iter_mut() {
+            if thread.state == EssenceAspect::Finished {
+                continue;
+            }
             thread.update(delta_time);
+        }
+
+        self.soul_threads
+            .retain(|thread| thread.state != EssenceAspect::Finished);
+    }
+
+    pub fn stop_all(&mut self) {
+        self.soul_threads
+            .iter_mut()
+            .for_each(|thread| thread.stop());
+    }
+
+    pub fn stop_by_name(&mut self, name: &str) {
+        let soul_thread = self
+            .soul_threads
+            .iter_mut()
+            .find(|thread| thread.name == name);
+        if let Some(soul_thread) = soul_thread {
+            soul_thread.stop();
         }
     }
 }
