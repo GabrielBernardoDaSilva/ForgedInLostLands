@@ -14,3 +14,12 @@ quote = "1.0.9"
 syn = "2.0.39"
 proc-macro2 = "1.0"
 prime-forge = { path = "../prime-forge" }
+
+
+[dependencies.uuid]
+version = "1.8.0"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]

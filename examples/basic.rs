@@ -1,9 +1,8 @@
 use prime_derived::{hierarchy_ethereal_flow, DestinyRiftArcaneScript, EtherealFlowArcaneScript};
 use prime_forge::{
-    forged_trait::{ForgedHierarchy, ForgedTrait},
+    forged_trait::ForgedTrait,
     lost_realm::LostRealm,
     soul_thread::{EssenceAspect, SoulThread, TemporalPause},
-    EtherealFlow,
 };
 
 #[hierarchy_ethereal_flow]
@@ -19,31 +18,6 @@ impl ForgedTrait for Player {
     }
 
     fn update(&mut self) {}
-}
-
-struct Player1 {
-    name: String,
-    health: i32,
-    father: Option<*const prime_forge::forged_object::ForgedObject>,
-}
-
-impl EtherealFlow for Player1 {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
-
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self
-    }
-}
-
-impl prime_forge::forged_trait::ForgedHierarchy for Player1 {
-    fn get_father(&self) -> Option<&prime_forge::forged_object::ForgedObject> {
-        unsafe { self.father.unwrap().as_ref() }
-    }
-    fn set_father(&mut self, father: &prime_forge::forged_object::ForgedObject) {
-        self.father = Some(father as *const prime_forge::forged_object::ForgedObject);
-    }
 }
 
 #[hierarchy_ethereal_flow]
@@ -75,14 +49,12 @@ fn main() {
         ..Default::default()
     };
 
-    let mut ptr: Option<*const prime_forge::forged_object::ForgedObject> = None;
-    {
-        let forged_object = lost_realm
-            .forge_new_object("Forged", (player, health))
-            .unwrap();
-        ptr = Some(forged_object as *const _);
-    }
+    // let f2 = lost_realm.forge_new_object("Forged1", (health, )).unwrap();
+    // let f = lost_realm.forge_new_object_mut("Forged", (player, health)).unwrap();
+    // f.set_transform_child(f2.transform.clone());
+  
 
+   
 
     // println!("Player: {:?}", father.name);
 

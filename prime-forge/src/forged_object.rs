@@ -1,4 +1,6 @@
-use std::cell::RefCell;
+use std::{cell::RefCell, rc::Rc};
+
+use crate::forged_trait::TransformSpecialTrait;
 
 use super::{forged_trait::ForgedTrait, lost_lands_fault::LostLostLandsFaultForgedObject};
 
@@ -6,6 +8,7 @@ pub struct ForgedObject {
     pub name: String,
     pub id: uuid::Uuid,
     pub forged_traits: Vec<Box<RefCell<dyn ForgedTrait>>>,
+    pub transform: Rc<RefCell<TransformSpecialTrait>>
 }
 
 impl ForgedObject {
@@ -14,11 +17,12 @@ impl ForgedObject {
             name,
             id: uuid::Uuid::new_v4(),
             forged_traits: Vec::new(),
+            transform: Rc::new(RefCell::new(TransformSpecialTrait::new())),
         }
     }
 
     pub fn add_trait(&mut self, new_trait: Box<RefCell<dyn ForgedTrait>>) {
-        new_trait.borrow_mut().set_father(&self);
+        new_trait.borrow_mut().set_father(self.id.to_string());
         self.forged_traits.push(new_trait);
     }
 
@@ -94,6 +98,37 @@ impl ForgedObject {
             ))
         }
     }
+
+
+    // Transform Trait Special
+    pub fn set_transform_child(&self, child: Rc<RefCell<TransformSpecialTrait>>) {
+        self.transform.borrow_mut().set_children(vec![child.clone()]);
+        child.borrow_mut().set_parent(self.transform.clone());
+    }
+
+    pub fn set_transform_parent(&self, parent: Rc<RefCell<TransformSpecialTrait>>) {
+        parent.borrow_mut().set_children(vec![self.transform.clone()]);
+        self.transform.borrow_mut().set_parent(parent);
+        self.transform.borrow_mut().update_self_and_children();
+    }
+
+    pub fn set_transform_children(&self, children: Vec<Rc<RefCell<TransformSpecialTrait>>>) {
+        self.transform.borrow_mut().set_children(children.clone());
+        for child in children {
+            child.borrow_mut().set_parent(self.transform.clone());
+        }
+        self.transform.borrow_mut().update_self_and_children();
+    }
+
+
+    
+
+
+    
+
+    
+ 
+
 }
 
 pub trait TraitBundle {

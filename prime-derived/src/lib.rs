@@ -50,13 +50,16 @@ pub fn hierarchy_ethereal_flow(_attr: TokenStream, item: TokenStream) -> TokenSt
 
     println!("struct_name: {:?}", item.to_string());
 
-    let father_str = "pub father: Option<*const prime_forge::forged_object::ForgedObject>} 
+    let father_str = "pub father: Option<String>} 
                             impl prime_forge::forged_trait::ForgedHierarchy for #### {
-                                fn get_father(&self) -> Option<&prime_forge::forged_object::ForgedObject> {
-                                    unsafe { self.father.unwrap().as_ref() }
+                                fn get_father(&self) -> Option<String> {
+                                   if let Some(father) = &self.father {
+                                       return Some(father.clone());
+                                   }
+                                   None
                                 }
-                                fn set_father(&mut self, father: &prime_forge::forged_object::ForgedObject) {
-                                    self.father = Some(father as *const prime_forge::forged_object::ForgedObject);
+                                fn set_father(&mut self, father_id:String) {
+                                    self.father = Some(father_id);
                                 }
                             }";
     let father_str = father_str.replace("####", struct_name);

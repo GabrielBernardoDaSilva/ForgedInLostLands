@@ -87,6 +87,17 @@ impl LostRealm {
 
     /// Forged Object functions
     /// alias for adding object
+    pub fn forge_new_object_mut(
+        &mut self,
+        name: &str,
+        traits: impl TraitBundle,
+    ) -> Option<&mut ForgedObject> {
+        let mut forged_object = ForgedObject::new(name.to_string());
+        traits.craft_trait_bundle(&mut forged_object);
+        self.add_object(forged_object);
+        self.get_mut_forged_object(name)
+    }
+
     pub fn forge_new_object(
         &mut self,
         name: &str,
@@ -104,13 +115,19 @@ impl LostRealm {
             .find(|object| object.name == name)
     }
 
+    pub fn get_mut_forged_object(&mut self, name: &str) -> Option<&mut ForgedObject> {
+        self.forged_objects
+            .iter_mut()
+            .find(|object| object.name == name)
+    }
+
     pub fn get_forged_object_by_trait<T: 'static + ForgedTrait>(&self) -> Option<&ForgedObject> {
         self.forged_objects
             .iter()
             .find(|object| object.get_trait::<T>().is_ok())
     }
 
-    pub fn get_trait_by_type<T: 'static + ForgedTrait>(&self,) -> Option<&T> {
+    pub fn get_trait_by_type<T: 'static + ForgedTrait>(&self) -> Option<&T> {
         self.forged_objects
             .iter()
             .find(|object| object.get_trait::<T>().is_ok())
@@ -130,6 +147,17 @@ impl LostRealm {
             .position(|object| object.name == name);
         if let Some(index) = index {
             Some(self.forged_objects.remove(index))
+        } else {
+            None
+        }
+    }
+
+    pub fn get_parent_forged_object(&self, trait_: &impl ForgedTrait) -> Option<&ForgedObject> {
+        let father_id = trait_.get_father();
+        if let Some(id) = father_id {
+            self.forged_objects
+                .iter()
+                .find(|object| object.id == uuid::Uuid::parse_str(id.as_str()).unwrap())
         } else {
             None
         }
