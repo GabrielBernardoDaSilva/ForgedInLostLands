@@ -1,12 +1,15 @@
 [package]
-name = "forged-in-lost-lands"
+name = "prime-derived"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[workspace]   
-resolver = "2"
-members = ["prime-derived", "prime-forge"] 
+
+[lib]
+proc-macro = true
+
 
 [dependencies]
-
+quote = "1.0.9"
+syn = "2.0.39"
+prime-forge = { path = "../prime-forge" }
