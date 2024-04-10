@@ -4,32 +4,37 @@ use super::{forged_trait::ForgedTrait, lost_lands_fault::LostLostLandsFaultForge
 
 pub struct ForgedObject {
     pub name: String,
-    pub id: u32,
+    pub id: uuid::Uuid,
     pub forged_traits: Vec<Box<RefCell<dyn ForgedTrait>>>,
 }
 
 impl ForgedObject {
-    pub fn new(name: String, id: u32) -> ForgedObject {
+    pub fn new(name: String) -> ForgedObject {
         ForgedObject {
             name,
-            id,
+            id: uuid::Uuid::new_v4(),
             forged_traits: Vec::new(),
         }
     }
 
-    pub fn add_trait(&mut self, trait_: Box<RefCell<dyn ForgedTrait>>) {
-        self.forged_traits.push(trait_);
+    pub fn add_trait(&mut self, new_trait: Box<RefCell<dyn ForgedTrait>>) {
+        new_trait.borrow_mut().set_father(&self);
+        self.forged_traits.push(new_trait);
+    }
+
+    pub fn add_traits<T: TraitBundle>(&mut self, traits: T) {
+        traits.craft_trait_bundle(self);
     }
 
     pub fn start(&self) {
         for trait_ in &self.forged_traits {
-            trait_.borrow().start();
+            trait_.borrow_mut().start();
         }
     }
 
     pub fn update(&self) {
         for trait_ in &self.forged_traits {
-            trait_.borrow().update();
+            trait_.borrow_mut().update();
         }
     }
 
@@ -90,3 +95,70 @@ impl ForgedObject {
         }
     }
 }
+
+pub trait TraitBundle {
+    fn craft_trait_bundle(self, forged_object: &mut ForgedObject);
+}
+
+macro_rules! impl_trait_bundle {
+    ($(($name: ident, $index: tt)),*) => {
+        impl<$($name: ForgedTrait + 'static),*> TraitBundle for ($($name,)*) {
+            fn craft_trait_bundle(self, forged_object: &mut ForgedObject) {
+                $(forged_object.add_trait(Box::new(RefCell::new(self.$index)));)*
+            }
+        }
+    };
+}
+impl_trait_bundle!((A, 0));
+impl_trait_bundle!((A, 0), (B, 1));
+impl_trait_bundle!((A, 0), (B, 1), (C, 2));
+impl_trait_bundle!((A, 0), (B, 1), (C, 2), (D, 3));
+impl_trait_bundle!((A, 0), (B, 1), (C, 2), (D, 3), (E, 4));
+impl_trait_bundle!((A, 0), (B, 1), (C, 2), (D, 3), (E, 4), (F, 5));
+impl_trait_bundle!((A, 0), (B, 1), (C, 2), (D, 3), (E, 4), (F, 5), (G, 6));
+impl_trait_bundle!(
+    (A, 0),
+    (B, 1),
+    (C, 2),
+    (D, 3),
+    (E, 4),
+    (F, 5),
+    (G, 6),
+    (H, 7)
+);
+impl_trait_bundle!(
+    (A, 0),
+    (B, 1),
+    (C, 2),
+    (D, 3),
+    (E, 4),
+    (F, 5),
+    (G, 6),
+    (H, 7),
+    (I, 8)
+);
+impl_trait_bundle!(
+    (A, 0),
+    (B, 1),
+    (C, 2),
+    (D, 3),
+    (E, 4),
+    (F, 5),
+    (G, 6),
+    (H, 7),
+    (I, 8),
+    (J, 9)
+);
+impl_trait_bundle!(
+    (A, 0),
+    (B, 1),
+    (C, 2),
+    (D, 3),
+    (E, 4),
+    (F, 5),
+    (G, 6),
+    (H, 7),
+    (I, 8),
+    (J, 9),
+    (K, 10)
+);

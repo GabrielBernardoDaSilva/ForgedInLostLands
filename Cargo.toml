@@ -9,4 +9,9 @@ resolver = "2"
 members = ["prime-derived", "prime-forge"] 
 
 [dependencies]
+prime-forge = { path = "prime-forge" }
+prime-derived = { path = "prime-derived" }
 
+[[example]]
+name = "basic"
+path = "examples/basic.rs"
