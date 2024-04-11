@@ -64,6 +64,39 @@ fn main() {
     f.set_transform_child(f2.transform.clone());
     f.transform.borrow_mut().update_self_and_children();
 
+    let h = f.get_trait::<Health>().unwrap();
+    let father = lost_realm.get_mut_parent_forged_object(h).unwrap();
+    println!("Father: {:?}", father.name);
+
+    let p = lost_realm.get_mut_trait_by_type::<Player>().unwrap();
+    println!("Player: {:?}", p.name);
+    let father = lost_realm.get_mut_parent_forged_object(p).unwrap();
+    println!("Father: {:?}", father.name);
+
+    let all_forged_object_by_health_traits = lost_realm.get_mut_all_forged_objects_by_trait::<Health>();
+    for fo in all_forged_object_by_health_traits {
+        println!("Forged Object: {:?}", fo.name);
+        fo.name += "!";
+    }
+
+    let all_health_traits = lost_realm.get_mut_all_trait_by_type::<Health>();
+    for health in all_health_traits {
+        println!("Health: {:?}", health.health);
+        health.health += 100;
+    }
+
+    let all_forged_object_by_health_traits = lost_realm.get_all_forged_objects_by_trait::<Health>();
+    for fo in all_forged_object_by_health_traits {
+        println!("Forged Object: {:?}", fo.name);
+    }
+
+    let all_health_traits = lost_realm.get_all_trait_by_type::<Health>();
+    for health in all_health_traits {
+        println!("Health: {:?}", health.health);
+    }
+
+    
+
     lost_realm.add_destiny_rift_event(Collision(true));
     let rs = lost_realm.consume_destiny_rift_event::<Collision>();
     if let Some(rs) = rs {

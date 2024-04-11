@@ -211,4 +211,105 @@ impl LostRealm {
             None
         }
     }
+
+    pub fn get_parent_forged_object(&self, trait_: &impl ForgedTrait) -> Option<&ForgedObject> {
+        let father_id = trait_.get_father();
+        if let Some(id) = father_id {
+            let borrow = self.forged_objects.borrow();
+            let rc = borrow
+                .iter()
+                .find(|object| object.id == uuid::Uuid::parse_str(id.as_str()).unwrap());
+            if let Some(rc) = rc {
+                let rc = unsafe {
+                    let ptr = rc as *const ForgedObject;
+                    &*ptr
+                };
+                Some(rc)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    pub fn get_mut_parent_forged_object(
+        &self,
+        trait_: &impl ForgedTrait,
+    ) -> Option<&mut ForgedObject> {
+        let father_id = trait_.get_father();
+        if let Some(id) = father_id {
+            let mut borrow_mut = self.forged_objects.borrow_mut();
+            let rc = borrow_mut
+                .iter_mut()
+                .find(|object| object.id == uuid::Uuid::parse_str(id.as_str()).unwrap());
+            if let Some(rc) = rc {
+                let rc = unsafe {
+                    let ptr = rc as *const ForgedObject;
+                    &mut *(ptr as *mut ForgedObject)
+                };
+                Some(rc)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    pub fn get_all_forged_objects_by_trait<T: 'static + ForgedTrait>(&self) -> Vec<&ForgedObject> {
+        let borrow = self.forged_objects.borrow();
+        let rc = borrow
+            .iter()
+            .filter(|object| object.get_trait::<T>().is_ok())
+            .map(|object| unsafe {
+                let ptr = object as *const ForgedObject;
+                &*ptr
+            })
+            .collect();
+        rc
+    }
+
+    pub fn get_all_trait_by_type<T: 'static + ForgedTrait>(&self) -> Vec<&T> {
+        let borrow = self.forged_objects.borrow();
+        let rc = borrow
+            .iter()
+            .filter(|object| object.get_trait::<T>().is_ok())
+            .map(|object| object.get_trait::<T>().unwrap())
+            .map(|trait_| unsafe {
+                let ptr = trait_ as *const T;
+                &*ptr
+            })
+            .collect();
+        rc
+    }
+
+    pub fn get_mut_all_forged_objects_by_trait<T: 'static + ForgedTrait>(
+        &self,
+    ) -> Vec<&mut ForgedObject> {
+        let mut borrow_mut = self.forged_objects.borrow_mut();
+        let rc = borrow_mut
+            .iter_mut()
+            .filter(|object| object.get_trait::<T>().is_ok())
+            .map(|object| unsafe {
+                let ptr = object as *const ForgedObject;
+                &mut *(ptr as *mut ForgedObject)
+            })
+            .collect();
+        rc
+    }
+
+    pub fn get_mut_all_trait_by_type<T: 'static + ForgedTrait>(&self) -> Vec<&mut T> {
+        let mut borrow_mut = self.forged_objects.borrow_mut();
+        let rc = borrow_mut
+            .iter_mut()
+            .filter(|object| object.get_trait::<T>().is_ok())
+            .map(|object| object.get_trait_mut::<T>().unwrap())
+            .map(|trait_| unsafe {
+                let ptr = trait_ as *const T;
+                &mut *(ptr as *mut T)
+            })
+            .collect();
+        rc
+    }
 }
