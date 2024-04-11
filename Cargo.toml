@@ -1,6 +1,6 @@
 [package]
 name = "forged-in-lost-lands"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
@@ -27,9 +27,9 @@ prime-derived = { path = "./features/prime-derived", version = "0.1.0", default-
 nalgebra-glm = "0.18.0"
 
 
-[[example]]
-name = "basic"
-path = "examples/basic.rs"
+# [[example]]
+# name = "basic"
+# path = "examples/basic.rs"
 
 [http]
 check-revoke = false
