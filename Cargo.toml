@@ -13,8 +13,8 @@ resolver = "2"
 members = ["prime-derived", "prime-forge"]
 
 [dependencies]
-prime-forge = { path = "prime-forge" }
-prime-derived = { path = "prime-derived" }
+prime-forge = { path = "prime-forge", version = "*"}
+prime-derived = { path = "prime-derived", version = "*"}
 nalgebra-glm = "0.18.0"
 
 
