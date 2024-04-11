@@ -22,8 +22,8 @@ include = [
 members = ["./features/*"]
 
 [dependencies]
-prime-forge = { path = "./features/prime-forge", version = "0.1.0", default-features = true }
-prime-derived = { path = "./features/prime-derived", version = "0.1.0", default-features = true }
+prime-forge = { path = "./features/prime-forge", version = "0.2.0", default-features = true }
+prime-derived = { path = "./features/prime-derived", version = "0.2.0", default-features = true }
 nalgebra-glm = "0.18.0"
 
 
