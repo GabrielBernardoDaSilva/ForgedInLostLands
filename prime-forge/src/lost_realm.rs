@@ -1,4 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, rc::Rc, time::Duration};
 
 use crate::{arcane_weft::ArcaneWeft, forged_object::TraitBundle, forged_trait::ForgedTrait};
 
@@ -211,7 +211,7 @@ impl LostRealm {
             None
         }
     }
-    
+
     pub fn destroy_forged_object_by_ref(
         &self,
         forged_object: &ForgedObject,
@@ -327,5 +327,14 @@ impl LostRealm {
             })
             .collect();
         rc
+    }
+
+    // EonForge
+    pub fn get_delta_time(&self) -> f32 {
+        self.eonforge.borrow().get_delta_time()
+    }
+
+    pub fn get_time_elapsed(&self) -> Duration {
+        self.eonforge.borrow().get_time_elapsed_since_start()
     }
 }

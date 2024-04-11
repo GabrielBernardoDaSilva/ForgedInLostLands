@@ -1,8 +1,45 @@
+Forged in Lost Lands Game Engine
+Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use. It provides a straightforward API for managing game objects, traits, events, and coroutines.
+
+Features
+Data Control: Manage game data with ease using Rust's strong typing and data ownership model.
+
+Ethereal Flow: Utilize an Ethereal Flow system to manage game object hierarchies and behavior.
+Event Handling: Handle game events through Destiny Rifts.
+Thread Management: Manage game logic and coroutine tasks using Soul Threads.
+ForgetTrait: Set behavior to your traits that will be execute in every update.
+EonForge: Has every thing related to time control of tour application.
+ArcaneWeft: Provide a way to separate your logic across multiple files like plugin system.
+ForgedObject: The core of each entity that need to update their traits.
+
+Simple Usage: Designed to be simple to use and integrate into your Rust game projects.
+
+## Important
+
+This engine does not have rendering by default,
+You need to pick one you prefer and use with in!
+
+Installation
+To use Forged in Lost Lands in your Rust project, simply add the following line to your Cargo.toml file:
+
+```toml
+[dependencies]
+bifrost-ecs = "0.1.0"
+
+```
+
+Example Usage
+rust
+
+<pre><code>
+// Important imports
 use prime_derived::{hierarchy_ethereal_flow, DestinyRiftArcaneScript, EtherealFlowArcaneScript};
 use prime_forge::{
     arcane_weft::ArcaneWeft, forged_trait::ForgedTrait, lost_realm::LostRealm, soul_thread::{EssenceAspect, SoulThread, TemporalPause}
 };
 
+
+// Use of proc_macro for some internals and attribute macro for some hierarchical features. 
 #[hierarchy_ethereal_flow]
 #[derive(Default)]
 struct Player {
@@ -10,6 +47,7 @@ struct Player {
     health: i32,
 }
 
+// Give behavior to your forged object 
 impl ForgedTrait for Player {
     fn start(&mut self) {
         println!("Player started");
@@ -32,6 +70,7 @@ impl ForgedTrait for Health {
     fn update(&mut self) {}
 }
 
+// Define some custom events to your game or application
 #[derive(DestinyRiftArcaneScript, EtherealFlowArcaneScript)]
 pub struct Collision(bool);
 
@@ -128,8 +167,11 @@ fn main() {
     let time_since_start = lost_realm.get_time_elapsed();
     println!("Delta Time: {:?}", dt);
     println!("Time Since Start: {:?}", time_since_start);
-
-    
     lost_realm.start();
     lost_realm.debug_update();
 }
+
+</code></pre>
+
+License
+Forged in Lost Lands is licensed under the MIT License. See LICENSE for details.
