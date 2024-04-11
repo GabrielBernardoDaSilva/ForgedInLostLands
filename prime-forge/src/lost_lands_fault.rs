@@ -1,6 +1,7 @@
 #[derive(Debug)]
 pub enum LostLostLandsFaultForgedObject {
     TraitNotFound(String),
+    TraitAlreadyExists(String),
 }
 
 impl std::error::Error for LostLostLandsFaultForgedObject {}
@@ -10,6 +11,9 @@ impl std::fmt::Display for LostLostLandsFaultForgedObject {
         match self {
             LostLostLandsFaultForgedObject::TraitNotFound(forged_trait) => {
                 write!(f, "Trait {} not found", forged_trait)
+            }
+            LostLostLandsFaultForgedObject::TraitAlreadyExists(forged_trait) => {
+                write!(f, "Trait {} already exists", forged_trait)
             }
         }
     }

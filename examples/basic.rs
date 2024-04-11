@@ -1,8 +1,6 @@
 use prime_derived::{hierarchy_ethereal_flow, DestinyRiftArcaneScript, EtherealFlowArcaneScript};
 use prime_forge::{
-    forged_trait::ForgedTrait,
-    lost_realm::LostRealm,
-    soul_thread::{EssenceAspect, SoulThread, TemporalPause},
+    arcane_weft::ArcaneWeft, forged_trait::ForgedTrait, lost_realm::LostRealm, soul_thread::{EssenceAspect, SoulThread, TemporalPause}
 };
 
 #[hierarchy_ethereal_flow]
@@ -36,6 +34,16 @@ impl ForgedTrait for Health {
 
 #[derive(DestinyRiftArcaneScript, EtherealFlowArcaneScript)]
 pub struct Collision(bool);
+
+
+pub struct ArcaneWeftCreation;
+impl ArcaneWeft for ArcaneWeftCreation{
+    fn craft(self, lost_realm: &mut LostRealm) {
+        lost_realm.add_destiny_rift_event(Collision(true));
+        lost_realm.forge_new_object("Player", (Player::default(), Health::default())).unwrap();
+        println!("Arcane Weft Creation")
+    }
+}
 
 fn main() {
     use nalgebra_glm as glm;
@@ -114,6 +122,8 @@ fn main() {
             amount_in_seconds: 1.0,
         });
     }));
+
+    lost_realm.arcane_weft_craft(ArcaneWeftCreation);
 
     lost_realm.start();
     lost_realm.debug_update();

@@ -8,7 +8,7 @@ pub struct ForgedObject {
     pub name: String,
     pub id: uuid::Uuid,
     pub forged_traits: Vec<Box<RefCell<dyn ForgedTrait>>>,
-    pub transform: Rc<RefCell<TransformSpecialTrait>>
+    pub transform: Rc<RefCell<TransformSpecialTrait>>,
 }
 
 impl ForgedObject {
@@ -21,9 +21,23 @@ impl ForgedObject {
         }
     }
 
-    pub fn add_trait(&mut self, new_trait: Box<RefCell<dyn ForgedTrait>>) {
+    pub fn add_trait(
+        &mut self,
+        new_trait: Box<RefCell<dyn ForgedTrait>>,
+    ) -> Result<(), LostLostLandsFaultForgedObject> {
+        // check if trait already exists
+        let trait_exists = self.forged_traits.iter().any(|trait_| {
+            trait_.borrow().as_any().type_id() == new_trait.borrow().as_any().type_id()
+        });
+        if trait_exists {
+            return Err(LostLostLandsFaultForgedObject::TraitAlreadyExists(
+                std::any::type_name::<dyn ForgedTrait>().to_string(),
+            ));
+        }
+
         new_trait.borrow_mut().set_father(self.id.to_string());
         self.forged_traits.push(new_trait);
+        Ok(())
     }
 
     pub fn add_traits<T: TraitBundle>(&mut self, traits: T) {
@@ -99,15 +113,18 @@ impl ForgedObject {
         }
     }
 
-
     // Transform Trait Special
     pub fn set_transform_child(&self, child: Rc<RefCell<TransformSpecialTrait>>) {
-        self.transform.borrow_mut().set_children(vec![child.clone()]);
+        self.transform
+            .borrow_mut()
+            .set_children(vec![child.clone()]);
         child.borrow_mut().set_parent(self.transform.clone());
     }
 
     pub fn set_transform_parent(&self, parent: Rc<RefCell<TransformSpecialTrait>>) {
-        parent.borrow_mut().set_children(vec![self.transform.clone()]);
+        parent
+            .borrow_mut()
+            .set_children(vec![self.transform.clone()]);
         self.transform.borrow_mut().set_parent(parent);
         self.transform.borrow_mut().update_self_and_children();
     }
@@ -119,16 +136,6 @@ impl ForgedObject {
         }
         self.transform.borrow_mut().update_self_and_children();
     }
-
-
-    
-
-
-    
-
-    
- 
-
 }
 
 pub trait TraitBundle {
@@ -139,7 +146,7 @@ macro_rules! impl_trait_bundle {
     ($(($name: ident, $index: tt)),*) => {
         impl<$($name: ForgedTrait + 'static),*> TraitBundle for ($($name,)*) {
             fn craft_trait_bundle(self, forged_object: &mut ForgedObject) {
-                $(forged_object.add_trait(Box::new(RefCell::new(self.$index)));)*
+                $(forged_object.add_trait(Box::new(RefCell::new(self.$index))).unwrap();)*
             }
         }
     };
