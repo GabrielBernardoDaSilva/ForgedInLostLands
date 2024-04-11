@@ -14,19 +14,17 @@ include = [
     "prime-forge/*",
     "src/*",
     "Cargo.toml",
-    "Cargo.lock"
+    "Cargo.lock",
 ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [workspace]
-members = ["prime-derived", "prime-forge"]
+members = ["./features/*"]
 
 [dependencies]
-prime-forge = { path = "prime-forge", version = "0.1.0" }
-prime-derived = { path = "prime-derived", version = "0.1.0" }
+prime-forge = { path = "./features/prime-forge", version = "0.1.0", default-features = true }
+prime-derived = { path = "./features/prime-derived", version = "0.1.0", default-features = true }
 nalgebra-glm = "0.18.0"
-
-
 
 
 [[example]]
