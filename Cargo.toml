@@ -30,3 +30,6 @@ members = ["./features/*"]
 # [[example]]
 # name = "basic"
 # path = "examples/basic.rs"
+
+[http]
+check-revoke = false
