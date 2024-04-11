@@ -6,6 +6,16 @@ authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
 license = "MIT"
 repository = "https://github.com/GabrielBernardoDaSilva/forged-in-lost-lands"
+include = [
+    "README.md",
+    "LICENSE",
+    "examples/*",
+    "prime-derived/*",
+    "prime-forge/*",
+    "src/*",
+    "Cargo.toml",
+    "Cargo.lock"
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [workspace]
@@ -15,6 +25,8 @@ members = ["prime-derived", "prime-forge"]
 prime-forge = { path = "prime-forge", version = "0.1.0" }
 prime-derived = { path = "prime-derived", version = "0.1.0" }
 nalgebra-glm = "0.18.0"
+
+
 
 
 [[example]]
