@@ -16,7 +16,7 @@ proc-macro = true
 quote = "1.0.9"
 syn = "2.0.39"
 proc-macro2 = "1.0"
-prime-forge = { path = "../prime-forge", version = "*"}
+prime-forge = { path = "../prime-forge", version = "0.1.0"}
 
 
 [dependencies.uuid]
