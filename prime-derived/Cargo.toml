@@ -2,7 +2,10 @@
 name = "prime-derived"
 version = "0.1.0"
 edition = "2021"
-
+authors = ["Gabriel Bernardo"]
+description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
+license = "MIT"
+repository = "https://github.com/GabrielBernardoDaSilva/forged-in-lost-lands"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
