@@ -211,6 +211,22 @@ impl LostRealm {
             None
         }
     }
+    
+    pub fn destroy_forged_object_by_ref(
+        &self,
+        forged_object: &ForgedObject,
+    ) -> Option<ForgedObject> {
+        let index = self
+            .forged_objects
+            .borrow()
+            .iter()
+            .position(|object| object.id == forged_object.id);
+        if let Some(index) = index {
+            Some(self.forged_objects.borrow_mut().remove(index))
+        } else {
+            None
+        }
+    }
 
     pub fn get_parent_forged_object(&self, trait_: &impl ForgedTrait) -> Option<&ForgedObject> {
         let father_id = trait_.get_father();
