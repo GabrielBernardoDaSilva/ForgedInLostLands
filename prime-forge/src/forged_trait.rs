@@ -50,16 +50,19 @@ impl TransformSpecialTrait {
 
     pub fn with_position(mut self, position: glm::Vec3) -> Self {
         self.position = position;
+        self.update_self_and_children();
         self
     }
 
     pub fn with_rotation(mut self, rotation: glm::Vec3) -> Self {
         self.rotation = rotation;
+        self.update_self_and_children();
         self
     }
 
     pub fn with_scale(mut self, scale: glm::Vec3) -> Self {
         self.scale = scale;
+        self.update_self_and_children();
         self
     }
 
@@ -117,11 +120,16 @@ impl TransformSpecialTrait {
 
     pub fn update_self_and_children(&mut self) {
         self.model_matrix = if let Some(parent) = self.get_parent() {
-            let parent = parent.borrow();
-            parent.get_local_model_matrix() * self.get_local_model_matrix()
+            let parent = unsafe {
+                let ptr = parent.as_ptr() as *const TransformSpecialTrait;
+                &*ptr
+            }; 
+            parent.model_matrix * self.get_local_model_matrix()
         } else {
             self.get_local_model_matrix()
         };
+
+        println!("Model Matrix: {:?}", self.model_matrix);
 
         for child in self.children.iter() {
             child.borrow_mut().update_self_and_children();

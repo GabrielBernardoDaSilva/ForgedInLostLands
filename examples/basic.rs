@@ -38,7 +38,8 @@ impl ForgedTrait for Health {
 pub struct Collision(bool);
 
 fn main() {
-    let mut lost_realm = LostRealm::new();
+    use nalgebra_glm as glm;
+    let lost_realm = LostRealm::new();
     let health = Health {
         health: 100,
         ..Default::default()
@@ -49,28 +50,19 @@ fn main() {
         ..Default::default()
     };
 
-    // let f2 = lost_realm.forge_new_object("Forged1", (health, )).unwrap();
-    // let f = lost_realm.forge_new_object_mut("Forged", (player, health)).unwrap();
-    // f.set_transform_child(f2.transform.clone());
-  
+    let f2 = lost_realm.forge_new_object("Forged1", (health,)).unwrap();
+    let health = Health {
+        health: 100,
+        ..Default::default()
+    };
+    let f = lost_realm
+        .forge_new_object("Forged", (player, health))
+        .unwrap();
+    f.transform.borrow_mut().position += glm::vec3(1.0, 0.0, 0.0);
+    f2.transform.borrow_mut().position += glm::vec3(1.0, 0.0, 0.0);
 
-   
-
-    // println!("Player: {:?}", father.name);
-
-    // let mut f_object = ForgedObject::new("Player".to_string());
-    // let health = Health {
-    //     health: 100,
-    //     ..Default::default()
-    // };
-
-    // f_object.add_trait(Box::new(RefCell::new(health)));
-    // let h = f_object.get_trait::<Health>().unwrap();
-    // println!("Health: {:?}", h.0);
-    // let h = f_object.get_trait_mut::<Health>().unwrap();
-    // println!("Health: {:?}", h.0);
-    // h.0 = 200;
-    // lost_realm.add_object(f_object);
+    f.set_transform_child(f2.transform.clone());
+    f.transform.borrow_mut().update_self_and_children();
 
     lost_realm.add_destiny_rift_event(Collision(true));
     let rs = lost_realm.consume_destiny_rift_event::<Collision>();
