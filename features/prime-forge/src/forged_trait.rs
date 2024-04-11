@@ -3,13 +3,17 @@ use std::{
     rc::{Rc, Weak},
 };
 
+use crate::lost_realm::LostRealm;
+
 use super::EtherealFlow;
 
 use nalgebra_glm as glm;
 
 pub trait ForgedTrait: ForgedHierarchy {
-    fn start(&mut self) {}
-    fn update(&mut self) {}
+    #[allow(unused_variables)]
+    fn start(&mut self, lost_realm: &mut LostRealm) {}
+    #[allow(unused_variables)]
+    fn update(&mut self, lost_realm: &mut LostRealm, dt: f32) {}
 }
 
 pub trait ForgedHierarchy: EtherealFlow {
@@ -68,7 +72,10 @@ impl TransformSpecialTrait {
 
     pub(crate) fn set_parent(&mut self, parent: Rc<RefCell<TransformSpecialTrait>>) {
         if let Some(parent) = self.get_parent() {
-            parent.borrow_mut().children.retain(|child| child.borrow().id != self.id);
+            parent
+                .borrow_mut()
+                .children
+                .retain(|child| child.borrow().id != self.id);
         }
         self.parent = Some(Rc::downgrade(&parent));
     }
@@ -123,7 +130,7 @@ impl TransformSpecialTrait {
             let parent = unsafe {
                 let ptr = parent.as_ptr() as *const TransformSpecialTrait;
                 &*ptr
-            }; 
+            };
             parent.model_matrix * self.get_local_model_matrix()
         } else {
             self.get_local_model_matrix()

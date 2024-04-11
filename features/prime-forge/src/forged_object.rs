@@ -1,6 +1,6 @@
 use std::{cell::RefCell, rc::Rc};
 
-use crate::forged_trait::TransformSpecialTrait;
+use crate::{forged_trait::TransformSpecialTrait, lost_realm::LostRealm};
 
 use super::{forged_trait::ForgedTrait, lost_lands_fault::LostLostLandsFaultForgedObject};
 
@@ -44,15 +44,15 @@ impl ForgedObject {
         traits.craft_trait_bundle(self);
     }
 
-    pub fn start(&self) {
+    pub fn start(&self, lost_realm: &mut LostRealm) {
         for trait_ in &self.forged_traits {
-            trait_.borrow_mut().start();
+            trait_.borrow_mut().start(lost_realm);
         }
     }
 
-    pub fn update(&self) {
+    pub fn update(&self, lost_realm: &mut LostRealm, dt: f32) {
         for trait_ in &self.forged_traits {
-            trait_.borrow_mut().update();
+            trait_.borrow_mut().update(lost_realm, dt);
         }
     }
 

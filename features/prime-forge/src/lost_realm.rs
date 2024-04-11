@@ -27,19 +27,31 @@ impl LostRealm {
     }
 
     fn add_object(&self, object: ForgedObject) {
-        self.forged_objects.borrow_mut().push(object);
+        unsafe {
+            let ptr = self.forged_objects.as_ptr();
+            let mut_ref = &mut *ptr;
+            mut_ref.push(object);
+        }
     }
 
     pub fn start(&self) {
         self.eonforge.borrow_mut().start();
         for object in self.forged_objects.borrow_mut().iter() {
-            object.start();
+            let mut_ptr = unsafe {
+                let ptr = self as *const LostRealm;
+                std::mem::transmute::<*const LostRealm, &mut LostRealm>(ptr)
+            };
+            object.start(mut_ptr);
         }
     }
 
     pub fn update(&self) {
         for object in self.forged_objects.borrow_mut().iter() {
-            object.update();
+            let mut_ptr = unsafe {
+                let ptr = self as *const LostRealm;
+                std::mem::transmute::<*const LostRealm, &mut LostRealm>(ptr)
+            };
+            object.update(mut_ptr, self.eonforge.borrow().get_delta_time());
         }
         self.destiny_rift_manager.borrow_mut().remove_event();
         self.soul_threads_manager
@@ -125,7 +137,10 @@ impl LostRealm {
     }
 
     pub fn get_forged_object(&self, name: &str) -> Option<&ForgedObject> {
-        let borrow = self.forged_objects.borrow();
+        let borrow = unsafe {
+            let ptr = self.forged_objects.as_ptr();
+            &*ptr
+        };
         let rc = borrow.iter().find(|object| object.name == name);
         if let Some(rc) = rc {
             let rc = unsafe {
