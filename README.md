@@ -1,4 +1,4 @@
-Forged in Lost Lands Game Engine
+# Forged in Lost Lands
 Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use. It provides a straightforward API for managing game objects, traits, events, and coroutines.
 
 Features
