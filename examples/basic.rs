@@ -4,7 +4,6 @@ use prime_forge::{
 };
 
 #[hierarchy_ethereal_flow]
-#[derive(Default)]
 struct Player {
     name: String,
     health: i32,
@@ -21,7 +20,6 @@ impl ForgedTrait for Player {
 }
 
 #[hierarchy_ethereal_flow]
-#[derive(Default)]
 pub struct Health {
     pub health: i32,
 }

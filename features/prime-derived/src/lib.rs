@@ -68,7 +68,7 @@ pub fn hierarchy_ethereal_flow(_attr: TokenStream, item: TokenStream) -> TokenSt
 fn add_ethereal_flow_derive(item: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(item).unwrap();
     let gen = quote! {
-        #[derive(EtherealFlowArcaneScript)]
+        #[derive(EtherealFlowArcaneScript,Default)]
         #ast
     };
     gen.into()

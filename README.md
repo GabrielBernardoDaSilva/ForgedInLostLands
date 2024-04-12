@@ -25,7 +25,7 @@ To use Forged in Lost Lands in your Rust project, simply add the following line 
 
 ```toml
 [dependencies]
-forged-in-lost-lands = "0.3.11"
+forged-in-lost-lands = "0.3.2"
 
 ```
 
@@ -41,7 +41,6 @@ use prime_forge::{
 
 // Use of proc_macro for some internals and attribute macro for some hierarchical features. 
 #[hierarchy_ethereal_flow]
-#[derive(Default)]
 struct Player {
     name: String,
     health: i32,
@@ -59,7 +58,6 @@ impl ForgedTrait for Player {
 }
 
 #[hierarchy_ethereal_flow]
-#[derive(Default)]
 pub struct Health {
     pub health: i32,
 }
