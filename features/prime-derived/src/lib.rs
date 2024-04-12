@@ -11,7 +11,7 @@ pub fn destiny_rift_derive(input: TokenStream) -> TokenStream {
 fn impl_destiny_rift(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
     let gen = quote! {
-        impl prime_forge::destiny_rift::DestinyRift for #name {}
+        impl forged_in_lost_lands::destiny_rift::DestinyRift for #name {}
     };
     gen.into()
 }
@@ -25,7 +25,7 @@ pub fn ethereal_flow_derive(input: TokenStream) -> TokenStream {
 fn impl_ethereal_flow(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
     let gen = quote! {
-        impl prime_forge::EtherealFlow for #name {
+        impl forged_in_lost_lands::EtherealFlow for #name {
             fn as_any(&self) -> &dyn std::any::Any {
                 self
             }
@@ -51,7 +51,7 @@ pub fn hierarchy_ethereal_flow(_attr: TokenStream, item: TokenStream) -> TokenSt
     println!("struct_name: {:?}", item.to_string());
 
     let father_str = "pub father: Option<String>} 
-                            impl prime_forge::forged_trait::ForgedHierarchy for #### {
+                            impl ::forged_in_lost_lands::forged_trait::ForgedHierarchy for #### {
                                 fn get_father(&self) -> Option<String> {
                                    if let Some(father) = &self.father {
                                        return Some(father.clone());
