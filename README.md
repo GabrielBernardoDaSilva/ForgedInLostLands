@@ -25,7 +25,7 @@ To use Forged in Lost Lands in your Rust project, simply add the following line 
 
 ```toml
 [dependencies]
-bifrost-ecs = "0.1.0"
+forged-in-lost-lands = "0.3.0"
 
 ```
 

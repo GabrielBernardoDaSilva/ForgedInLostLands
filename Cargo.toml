@@ -30,5 +30,4 @@ nalgebra-glm = "0.18.0"
 name = "basic"
 path = "examples/basic.rs"
 
-[http]
-check-revoke = false
+
