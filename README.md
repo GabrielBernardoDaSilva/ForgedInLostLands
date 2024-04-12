@@ -32,7 +32,7 @@ forged-in-lost-lands = "0.3.0"
 Example Usage
 rust
 
-<pre><code>
+```rust
 // Important imports
 use prime_derived::{hierarchy_ethereal_flow, DestinyRiftArcaneScript, EtherealFlowArcaneScript};
 use prime_forge::{
@@ -175,9 +175,7 @@ fn main() {
     lost_realm.start();
     lost_realm.debug_update();
 }
-
-
-</code></pre>
+```
 
 License
 Forged in Lost Lands is licensed under the MIT License. See LICENSE for details.
