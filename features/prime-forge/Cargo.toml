@@ -20,4 +20,8 @@ features = [
 ]
 
 
+[source.crates-io]
+index = "https://github.com/rust-lang/crates.io-index" # I set the source to the official github index
+
+[http]
 proxy = ""
