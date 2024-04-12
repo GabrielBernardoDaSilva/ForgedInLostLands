@@ -48,8 +48,6 @@ pub fn hierarchy_ethereal_flow(_attr: TokenStream, item: TokenStream) -> TokenSt
     // add ethereal flow derive
     let item = add_ethereal_flow_derive(item);
 
-    println!("struct_name: {:?}", item.to_string());
-
     let father_str = "pub father: Option<String>} 
                             impl ::forged_in_lost_lands::forged_trait::ForgedHierarchy for #### {
                                 fn get_father(&self) -> Option<String> {

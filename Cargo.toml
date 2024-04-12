@@ -22,7 +22,7 @@ members = ["./features/*"]
 
 [dependencies]
 prime-forge = { path = "./features/prime-forge", version = "0.2.2" }
-prime-derived = { path = "./features/prime-derived", version = "0.2.2" }
+prime-derived = { path = "./features/prime-derived", version = "0.2.3" }
 nalgebra-glm = "0.18.0"
 
 
