@@ -18,7 +18,7 @@ Simple Usage: Designed to be simple to use and integrate into your Rust game pro
 ## Important
 
 This engine does not have rendering by default,
-You need to pick one you prefer and use with in!
+You need to pick one you prefer and use with it!
 
 Installation
 To use Forged in Lost Lands in your Rust project, simply add the following line to your Cargo.toml file:
