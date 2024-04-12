@@ -25,7 +25,7 @@ To use Forged in Lost Lands in your Rust project, simply add the following line 
 
 ```toml
 [dependencies]
-forged-in-lost-lands = "0.3.26"
+forged-in-lost-lands = "0.3.3"
 
 ```
 
@@ -105,7 +105,7 @@ fn main() {
     f.transform.borrow_mut().position += glm::vec3(1.0, 0.0, 0.0);
     f2.transform.borrow_mut().position += glm::vec3(1.0, 0.0, 0.0);
 
-    f.set_transform_child(f2.transform.clone());
+    f.set_transform_parent(f2.transform.clone());
     f.transform.borrow_mut().update_self_and_children();
 
     let h = f.get_trait::<Health>().unwrap();
