@@ -31,7 +31,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "forged-in-lost-lands"
-version = "0.3.2"
+version = "0.3.25"
 dependencies = [
  "nalgebra-glm",
  "prime-derived",
@@ -144,7 +144,7 @@ checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
 
 [[package]]
 name = "prime-derived"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "prime-forge",
  "proc-macro2",
@@ -155,7 +155,7 @@ dependencies = [
 
 [[package]]
 name = "prime-forge"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
  "nalgebra-glm",
  "uuid",

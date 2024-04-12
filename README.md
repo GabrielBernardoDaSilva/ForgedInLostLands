@@ -25,7 +25,7 @@ To use Forged in Lost Lands in your Rust project, simply add the following line 
 
 ```toml
 [dependencies]
-forged-in-lost-lands = "0.3.2"
+forged-in-lost-lands = "0.3.25"
 
 ```
 
@@ -164,6 +164,7 @@ fn main() {
     lost_realm.arcane_weft_craft(ArcaneWeftCreation);
 
     // Get time related measures
+    // need to pass current time to EonForge in update method
     let dt = lost_realm.get_delta_time();
     let time_since_start = lost_realm.get_time_elapsed();
     println!("Delta Time: {:?}", dt);

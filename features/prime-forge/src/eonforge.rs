@@ -3,6 +3,7 @@ use std::time::Duration;
 pub struct EonForge {
     delta_time: f32,
     time_elapsed_since_start: Duration,
+    last_time: f32,
 }
 
 impl EonForge {
@@ -10,6 +11,7 @@ impl EonForge {
         EonForge {
             delta_time: 0.0,
             time_elapsed_since_start: Duration::new(0, 0),
+            last_time: 0.0,
         }
     }
 
@@ -17,9 +19,10 @@ impl EonForge {
         self.time_elapsed_since_start = self.time_elapsed_since_start + Duration::new(1, 0);
     }
 
-    pub fn update(&mut self, dt: f32) {
+    pub fn update(&mut self, current_time: f32) {
         self.time_elapsed_since_start = self.time_elapsed_since_start + Duration::new(1, 0);
-        self.delta_time = dt;
+        self.delta_time = current_time - self.last_time;
+        self.last_time = current_time;
     }
 
     pub fn get_delta_time(&self) -> f32 {
