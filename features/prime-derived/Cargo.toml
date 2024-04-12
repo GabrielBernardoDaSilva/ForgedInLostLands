@@ -1,6 +1,6 @@
 [package]
 name = "prime-derived"
-version = "0.3.2"
+version = "0.3.21"
 edition = "2021"
 authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
@@ -16,7 +16,7 @@ proc-macro = true
 quote = "1.0.9"
 syn = "2.0.39"
 proc-macro2 = "1.0"
-prime-forge = { path = "../prime-forge", version = "0.3.2"}
+prime-forge = { path = "../prime-forge", version = "0.3.21"}
 
 
 [dependencies.uuid]

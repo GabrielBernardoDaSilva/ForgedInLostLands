@@ -25,7 +25,7 @@ To use Forged in Lost Lands in your Rust project, simply add the following line 
 
 ```toml
 [dependencies]
-forged-in-lost-lands = "0.3.25"
+forged-in-lost-lands = "0.3.26"
 
 ```
 
