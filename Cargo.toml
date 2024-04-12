@@ -31,3 +31,6 @@ name = "basic"
 path = "examples/basic.rs"
 
 
+
+proxy = ""
+
