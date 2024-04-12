@@ -39,7 +39,6 @@ use prime_forge::{
     arcane_weft::ArcaneWeft, forged_trait::ForgedTrait, lost_realm::LostRealm, soul_thread::{EssenceAspect, SoulThread, TemporalPause}
 };
 
-
 // Use of proc_macro for some internals and attribute macro for some hierarchical features. 
 #[hierarchy_ethereal_flow]
 #[derive(Default)]
@@ -48,13 +47,15 @@ struct Player {
     health: i32,
 }
 
-// Give behavior to your forged object 
+// Give behavior to your forged object
 impl ForgedTrait for Player {
-    fn start(&mut self) {
-        println!("Player started");
+    fn start(&mut self, lost_realm: &mut LostRealm) {
+        lost_realm.forge_new_object("Player", (Player::default(), Health::default())).unwrap();
     }
 
-    fn update(&mut self) {}
+    fn update(&mut self, _lost_realm: &mut LostRealm, _dt: f32) {
+        println!("Player Update");
+    }
 }
 
 #[hierarchy_ethereal_flow]
@@ -64,11 +65,7 @@ pub struct Health {
 }
 
 impl ForgedTrait for Health {
-    fn start(&mut self) {
-        println!("Health started");
-    }
-
-    fn update(&mut self) {}
+   
 }
 
 // Define some custom events to your game or application
@@ -76,6 +73,7 @@ impl ForgedTrait for Health {
 pub struct Collision(bool);
 
 
+// Define plugins for a better organization
 pub struct ArcaneWeftCreation;
 impl ArcaneWeft for ArcaneWeftCreation{
     fn craft(self, lost_realm: &mut LostRealm) {
@@ -151,6 +149,8 @@ fn main() {
         println!("Collision: {:?}", rs.0);
     }
     let mut counter = 10;
+
+    // Invoke coroutines
     lost_realm.add_soul_thread(SoulThread::new("Soul", move || {
         println!("Soul thread");
         counter -= 1;
@@ -164,13 +164,18 @@ fn main() {
     }));
 
     lost_realm.arcane_weft_craft(ArcaneWeftCreation);
+
+    // Get time related measures
     let dt = lost_realm.get_delta_time();
     let time_since_start = lost_realm.get_time_elapsed();
     println!("Delta Time: {:?}", dt);
     println!("Time Since Start: {:?}", time_since_start);
+
+    
     lost_realm.start();
     lost_realm.debug_update();
 }
+
 
 </code></pre>
 
