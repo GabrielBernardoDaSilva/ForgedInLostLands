@@ -114,27 +114,9 @@ impl ForgedObject {
     }
 
     // Transform Trait Special
-    pub fn set_transform_child(&self, child: Rc<RefCell<TransformSpecialTrait>>) {
-        self.transform
-            .borrow_mut()
-            .set_children(vec![child.clone()]);
-        child.borrow_mut().set_parent(self.transform.clone());
-    }
-
     pub fn set_transform_parent(&self, parent: Rc<RefCell<TransformSpecialTrait>>) {
-        parent
-            .borrow_mut()
-            .set_children(vec![self.transform.clone()]);
-        self.transform.borrow_mut().set_parent(parent);
-        self.transform.borrow_mut().update_self_and_children();
-    }
-
-    pub fn set_transform_children(&self, children: Vec<Rc<RefCell<TransformSpecialTrait>>>) {
-        self.transform.borrow_mut().set_children(children.clone());
-        for child in children {
-            child.borrow_mut().set_parent(self.transform.clone());
-        }
-        self.transform.borrow_mut().update_self_and_children();
+        TransformSpecialTrait::set_hierarchy( parent.clone(), self.transform.clone());
+        parent.borrow_mut().update_self_and_children();
     }
 }
 

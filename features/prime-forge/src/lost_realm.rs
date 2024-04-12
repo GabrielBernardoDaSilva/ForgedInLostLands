@@ -246,7 +246,10 @@ impl LostRealm {
     pub fn get_parent_forged_object(&self, trait_: &impl ForgedTrait) -> Option<&ForgedObject> {
         let father_id = trait_.get_father();
         if let Some(id) = father_id {
-            let borrow = self.forged_objects.borrow();
+            let borrow = unsafe {
+                let ptr = self.forged_objects.as_ptr();
+                &*ptr
+            };
             let rc = borrow
                 .iter()
                 .find(|object| object.id == uuid::Uuid::parse_str(id.as_str()).unwrap());

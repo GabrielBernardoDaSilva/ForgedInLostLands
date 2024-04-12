@@ -67,7 +67,7 @@ fn main() {
     f.transform.borrow_mut().position += glm::vec3(1.0, 0.0, 0.0);
     f2.transform.borrow_mut().position += glm::vec3(1.0, 0.0, 0.0);
 
-    f.set_transform_child(f2.transform.clone());
+    f.set_transform_parent(f2.transform.clone());
     f.transform.borrow_mut().update_self_and_children();
 
     let h = f.get_trait::<Health>().unwrap();

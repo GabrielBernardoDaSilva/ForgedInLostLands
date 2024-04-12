@@ -52,40 +52,32 @@ impl TransformSpecialTrait {
         }
     }
 
-    pub fn with_position(mut self, position: glm::Vec3) -> Self {
+    pub fn set_position(&mut self, position: glm::Vec3) {
         self.position = position;
         self.update_self_and_children();
-        self
     }
 
-    pub fn with_rotation(mut self, rotation: glm::Vec3) -> Self {
+    pub fn set_rotation(&mut self, rotation: glm::Vec3) {
         self.rotation = rotation;
         self.update_self_and_children();
-        self
     }
 
-    pub fn with_scale(mut self, scale: glm::Vec3) -> Self {
+    pub fn set_scale(&mut self, scale: glm::Vec3) {
         self.scale = scale;
         self.update_self_and_children();
-        self
     }
 
-    pub(crate) fn set_parent(&mut self, parent: Rc<RefCell<TransformSpecialTrait>>) {
-        if let Some(parent) = self.get_parent() {
-            parent
-                .borrow_mut()
-                .children
-                .retain(|child| child.borrow().id != self.id);
+    pub(crate) fn set_hierarchy(
+        parent: Rc<RefCell<TransformSpecialTrait>>,
+        child: Rc<RefCell<TransformSpecialTrait>>,
+    ) {
+        if let Some(parent) = child.borrow().parent.as_ref() {
+            parent.upgrade().unwrap().borrow_mut().children.retain(|c| {
+                c.borrow().id != child.borrow().id
+            });
         }
-        self.parent = Some(Rc::downgrade(&parent));
-    }
-
-    pub(crate) fn set_children(&mut self, children: Vec<Rc<RefCell<TransformSpecialTrait>>>) {
-        if children.len() > 0 {
-            self.children.extend(children.iter().cloned());
-        } else {
-            self.children = children;
-        }
+        parent.borrow_mut().children.push(child.clone());
+        child.borrow_mut().parent = Some(Rc::downgrade(&parent.clone()));
     }
 
     pub fn get_parent(&self) -> Option<Rc<RefCell<TransformSpecialTrait>>> {
@@ -135,9 +127,6 @@ impl TransformSpecialTrait {
         } else {
             self.get_local_model_matrix()
         };
-
-        println!("Model Matrix: {:?}", self.model_matrix);
-
         for child in self.children.iter() {
             child.borrow_mut().update_self_and_children();
         }
