@@ -6,7 +6,7 @@ authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
 license = "MIT"
 repository = "https://github.com/GabrielBernardoDaSilva/forged-in-lost-lands"
-keywords = ["minimalist-engine", "entity-component", "entity", "component", "ease-of-use"]
+keywords = ["entity-component", "entity", "component", "ease-of-use"]
 categories = ["development-tools", "minimalist-game-engine"]
 include = [
     "README.md",
