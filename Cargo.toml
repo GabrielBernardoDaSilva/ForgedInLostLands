@@ -1,11 +1,13 @@
 [package]
 name = "forged-in-lost-lands"
-version = "0.3.5"
+version = "0.3.51"
 edition = "2021"
 authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
 license = "MIT"
 repository = "https://github.com/GabrielBernardoDaSilva/forged-in-lost-lands"
+keywords = ["minimalist-game-engine", "entity-component", "entity", "component", "ease-of-use", "forged-in-lost-lands"]
+categories = ["development-tools", "minimalist-game-engine"]
 include = [
     "README.md",
     "LICENSE",
