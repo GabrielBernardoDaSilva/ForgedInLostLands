@@ -1,6 +1,6 @@
 [package]
 name = "forged-in-lost-lands"
-version = "0.3.3"
+version = "0.3.5"
 edition = "2021"
 authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
@@ -21,7 +21,7 @@ include = [
 members = ["./features/*"]
 
 [dependencies]
-prime-forge = { path = "./features/prime-forge", version = "0.3.3" }
+prime-forge = { path = "./features/prime-forge", version = "0.3.5" }
 prime-derived = { path = "./features/prime-derived", version = "0.3.3" }
 nalgebra-glm = "0.18.0"
 
