@@ -16,11 +16,11 @@ impl EonForge {
     }
 
     pub fn start(&mut self) {
-        self.time_elapsed_since_start = self.time_elapsed_since_start + Duration::new(1, 0);
+        self.time_elapsed_since_start = Duration::from_secs(0);
     }
 
     pub fn update(&mut self, current_time: f32) {
-        self.time_elapsed_since_start = self.time_elapsed_since_start + Duration::new(1, 0);
+        self.time_elapsed_since_start += Duration::from_secs(1);
         self.delta_time = current_time - self.last_time;
         self.last_time = current_time;
     }
@@ -31,5 +31,12 @@ impl EonForge {
 
     pub fn get_time_elapsed_since_start(&self) -> Duration {
         self.time_elapsed_since_start
+    }
+}
+
+
+impl Default for EonForge {
+    fn default() -> Self {
+        Self::new()
     }
 }

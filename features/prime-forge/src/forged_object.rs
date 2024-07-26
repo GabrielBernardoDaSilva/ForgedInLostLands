@@ -66,8 +66,7 @@ impl ForgedObject {
         if let Some(forged_trait) = forged_trait {
             let forged_trait = forged_trait.borrow();
             let forged_trait = forged_trait.as_any().downcast_ref::<T>().unwrap();
-            let forged_trait = unsafe { std::mem::transmute::<&T, &'static T>(forged_trait) };
-            return Ok(forged_trait);
+            Ok(unsafe { std::mem::transmute(forged_trait) })
         } else {
             Err(LostLostLandsFaultForgedObject::TraitNotFound(
                 std::any::type_name::<T>().to_string(),
@@ -84,10 +83,8 @@ impl ForgedObject {
 
         if let Some(forged_trait) = forged_trait {
             let mut forged_trait = forged_trait.borrow_mut();
-            let forged_trait = forged_trait.as_any_mut().downcast_mut::<T>().unwrap();
-            let forged_trait =
-                unsafe { std::mem::transmute::<&mut T, &'static mut T>(forged_trait) };
-            return Ok(forged_trait);
+            let forged_trait = forged_trait.as_any_mut().downcast_mut::<T>().unwrap();          
+            Ok(unsafe { std::mem::transmute(forged_trait) })
         } else {
             Err(LostLostLandsFaultForgedObject::TraitNotFound(
                 std::any::type_name::<T>().to_string(),

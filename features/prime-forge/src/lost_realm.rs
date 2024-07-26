@@ -34,24 +34,19 @@ impl LostRealm {
         }
     }
 
-    pub fn start(&self) {
+    pub fn start(&mut self) {
         self.eonforge.borrow_mut().start();
-        for object in self.forged_objects.borrow_mut().iter() {
-            let mut_ptr = unsafe {
-                let ptr = self as *const LostRealm;
-                std::mem::transmute::<*const LostRealm, &mut LostRealm>(ptr)
-            };
-            object.start(mut_ptr);
+        let forged_objects = self.forged_objects.clone();
+        for object in forged_objects.borrow_mut().iter() {
+            object.start(self);
         }
     }
 
-    pub fn update(&self) {
-        for object in self.forged_objects.borrow_mut().iter() {
-            let mut_ptr = unsafe {
-                let ptr = self as *const LostRealm;
-                std::mem::transmute::<*const LostRealm, &mut LostRealm>(ptr)
-            };
-            object.update(mut_ptr, self.eonforge.borrow().get_delta_time());
+    pub fn update(&mut self) {
+        let dt = self.eonforge.borrow().get_delta_time();
+        let forged_objects = self.forged_objects.clone();
+        for object in forged_objects.borrow_mut().iter() {
+            object.update(self, dt);
         }
         self.destiny_rift_manager.borrow_mut().remove_event();
         self.soul_threads_manager
@@ -59,7 +54,7 @@ impl LostRealm {
             .update(self.eonforge.borrow().get_delta_time());
     }
 
-    pub fn debug_update(&self) {
+    pub fn debug_update(&mut self) {
         loop {
             let dt = std::time::Duration::from_millis(1000 / 60);
 
@@ -108,12 +103,8 @@ impl LostRealm {
 
     /// Arcane Weft functions
     /// alias for plugging
-    pub fn arcane_weft_craft(&self, arcane_weft: impl ArcaneWeft) {
-        let mut_self = unsafe {
-            let ptr = self as *const LostRealm;
-            std::mem::transmute::<*const LostRealm, &mut LostRealm>(ptr)
-        };
-        arcane_weft.craft(mut_self);
+    pub fn arcane_weft_craft(&mut self, arcane_weft: impl ArcaneWeft) {
+        arcane_weft.craft(self);
     }
 
     /// Forged Object functions
@@ -220,11 +211,7 @@ impl LostRealm {
             .borrow()
             .iter()
             .position(|object| object.name == name);
-        if let Some(index) = index {
-            Some(self.forged_objects.borrow_mut().remove(index))
-        } else {
-            None
-        }
+        index.map(|index| self.forged_objects.borrow_mut().remove(index))
     }
 
     pub fn destroy_forged_object_by_ref(
@@ -236,11 +223,7 @@ impl LostRealm {
             .borrow()
             .iter()
             .position(|object| object.id == forged_object.id);
-        if let Some(index) = index {
-            Some(self.forged_objects.borrow_mut().remove(index))
-        } else {
-            None
-        }
+        index.map(|index| self.forged_objects.borrow_mut().remove(index))
     }
 
     pub fn get_parent_forged_object(&self, trait_: &impl ForgedTrait) -> Option<&ForgedObject> {
@@ -308,8 +291,7 @@ impl LostRealm {
         let borrow = self.forged_objects.borrow();
         let rc = borrow
             .iter()
-            .filter(|object| object.get_trait::<T>().is_ok())
-            .map(|object| object.get_trait::<T>().unwrap())
+            .filter_map(|object| object.get_trait::<T>().ok())
             .map(|trait_| unsafe {
                 let ptr = trait_ as *const T;
                 &*ptr
@@ -354,5 +336,11 @@ impl LostRealm {
 
     pub fn get_time_elapsed(&self) -> Duration {
         self.eonforge.borrow().get_time_elapsed_since_start()
+    }
+}
+
+impl Default for LostRealm {
+    fn default() -> Self {
+        Self::new()
     }
 }

@@ -26,13 +26,13 @@ impl DestinyRiftManager {
 
     pub fn remove_event(&mut self) {
         let keys_to_remove = self
-        .events
-        .iter()
-        .filter(|(_, ev)| ev.is_empty())
-        .map(|(key, _)| *key)
-        .collect::<Vec<_>>();
-    
-    for key in keys_to_remove {
+            .events
+            .iter()
+            .filter(|(_, ev)| ev.is_empty())
+            .map(|(key, _)| *key)
+            .collect::<Vec<_>>();
+
+        for key in keys_to_remove {
             println!("Removing event: {:?}", key);
             self.events.remove(&key);
         }
@@ -43,9 +43,14 @@ impl DestinyRiftManager {
         if let Some(ev) = self.events.get_mut(&std::any::TypeId::of::<T>()) {
             let ev = ev.pop().unwrap();
             let ev = ev.as_any().downcast_ref::<T>().unwrap();
-            let ev = unsafe { std::mem::transmute::<&T, &'static T>(ev) };
-            return Some(ev);
+            return Some(unsafe { std::mem::transmute::<&T, &'static T>(ev) });
         }
         None
+    }
+}
+
+impl Default for DestinyRiftManager {
+    fn default() -> Self {
+        DestinyRiftManager::new()
     }
 }

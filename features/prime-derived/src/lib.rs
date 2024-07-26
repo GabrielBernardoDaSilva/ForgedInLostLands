@@ -61,8 +61,7 @@ pub fn hierarchy_ethereal_flow(_attr: TokenStream, item: TokenStream) -> TokenSt
                                 }
                             }";
     let father_str = father_str.replace("####", struct_name);
-    let item = item.to_string().replace("}", &father_str).parse().unwrap();
-    item
+    item.to_string().replace("}", &father_str).parse().unwrap()
 }
 
 fn add_ethereal_flow_derive(item: TokenStream) -> TokenStream {

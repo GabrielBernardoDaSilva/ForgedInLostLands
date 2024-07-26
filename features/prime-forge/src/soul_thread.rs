@@ -113,3 +113,10 @@ impl SoulThreadManager {
         }
     }
 }
+
+
+impl Default for SoulThreadManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}

@@ -72,9 +72,12 @@ impl TransformSpecialTrait {
         child: Rc<RefCell<TransformSpecialTrait>>,
     ) {
         if let Some(parent) = child.borrow().parent.as_ref() {
-            parent.upgrade().unwrap().borrow_mut().children.retain(|c| {
-                c.borrow().id != child.borrow().id
-            });
+            parent
+                .upgrade()
+                .unwrap()
+                .borrow_mut()
+                .children
+                .retain(|c| c.borrow().id != child.borrow().id);
         }
         parent.borrow_mut().children.push(child.clone());
         child.borrow_mut().parent = Some(Rc::downgrade(&parent.clone()));
@@ -112,9 +115,7 @@ impl TransformSpecialTrait {
         let model = glm::Mat4::identity();
         let model = glm::translate(&model, &self.position);
         let model = model * rotation;
-        let model = glm::scale(&model, &self.scale);
-
-        model
+        glm::scale(&model, &self.scale)
     }
 
     pub fn update_self_and_children(&mut self) {

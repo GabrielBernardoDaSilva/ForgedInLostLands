@@ -45,7 +45,7 @@ impl ArcaneWeft for ArcaneWeftCreation{
 
 fn main() {
     use nalgebra_glm as glm;
-    let lost_realm = LostRealm::new();
+    let mut lost_realm = LostRealm::new();
     let health = Health {
         health: 100,
         ..Default::default()
