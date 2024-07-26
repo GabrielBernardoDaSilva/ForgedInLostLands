@@ -1,6 +1,6 @@
 [package]
 name = "forged-in-lost-lands"
-version = "0.3.51"
+version = "0.3.52"
 edition = "2021"
 authors = ["Gabriel Bernardo"]
 description = "Forged in Lost Lands is a simple game engine built in Rust that focuses on data control and ease of use"
